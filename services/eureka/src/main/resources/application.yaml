@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: eureka
+
+server:
+  port: 8761
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    jersey:
+      enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,loggers
+  endpoint:
+    loggers:
+      enabled: true
+
+logging:
+  level:
+    root: WARN
+    io.envoi: INFO

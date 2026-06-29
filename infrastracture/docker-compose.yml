@@ -1,0 +1,132 @@
+services:
+  eureka:
+    build:
+      context: ./eureka
+    image: eureka-service
+    container_name: eureka
+    ports:
+      - "8761:8761"
+    environment:
+      SPRING_APPLICATION_NAME: eureka
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "false"
+      EUREKA_CLIENT_FETCH_REGISTRY: "false"
+    networks:
+      - micro-net
+
+  hello-service:
+    build:
+      context: ./demo
+    image: hello-service
+    container_name: hello-service
+    depends_on:
+      - eureka
+      - postgres-hello
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_APPLICATION_NAME: hello-service
+      SERVER_PORT: 8081
+      REQUEST_INFO_SERVICE_URL: http://user-info-service:8082
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-hello:5432/hello_db
+      SPRING_DATASOURCE_USERNAME: hello_user
+      SPRING_DATASOURCE_PASSWORD: hello_pass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    networks:
+      - micro-net
+
+  user-info-service:
+    build:
+      context: ./user-info
+    image: user-info-service
+    container_name: user-info-service
+    depends_on:
+      - eureka
+      - postgres-users
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_APPLICATION_NAME: user-info
+      SERVER_PORT: 8082
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-users:5432/users_db
+      SPRING_DATASOURCE_USERNAME: name_user
+      SPRING_DATASOURCE_PASSWORD: pass_user
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    networks:
+      - micro-net
+
+  gateway:
+    build:
+      context: ./gateway
+    image: gateway-service
+    container_name: gateway
+    depends_on:
+      - eureka
+      - hello-service
+      - user-info-service
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_APPLICATION_NAME: gateway
+      SERVER_PORT: 8080
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+    networks:
+      - micro-net
+
+  postgres-hello:
+    image: postgres:16
+    container_name: postgres-hello
+    environment:
+      POSTGRES_DB: hello_db
+      POSTGRES_USER: hello_user
+      POSTGRES_PASSWORD: hello_pass
+    volumes:
+      - hello-db:/var/lib/postgresql/data
+    networks:
+      - micro-net
+
+  postgres-users:
+    image: postgres:16
+    container_name: postgres-users
+    environment:
+      POSTGRES_DB: users_db
+      POSTGRES_USER: name_user
+      POSTGRES_PASSWORD: pass_user
+    volumes:
+      - users-db:/var/lib/postgresql/data
+    networks:
+      - micro-net
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.1
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - micro-net
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - micro-net
+
+networks:
+  micro-net:
+    driver: bridge
+
+volumes:
+  hello-db:
+  users-db:
