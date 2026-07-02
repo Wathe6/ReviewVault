@@ -1,0 +1,37 @@
+services:
+  eureka:
+    build:
+      context: ..
+      dockerfile: services/eureka/Dockerfile
+    image: reviewvault-eureka
+    container_name: reviewvault-eureka
+    ports:
+      - "8761:8761"
+    environment:
+      SPRING_APPLICATION_NAME: eureka
+      SERVER_PORT: 8761
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "false"
+      EUREKA_CLIENT_FETCH_REGISTRY: "false"
+    networks:
+      - reviewvault-net
+
+  gateway:
+    build:
+      context: ..
+      dockerfile: services/gateway/Dockerfile
+    image: reviewvault-gateway
+    container_name: reviewvault-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka
+    environment:
+      SPRING_APPLICATION_NAME: gateway
+      SERVER_PORT: 8080
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+    networks:
+      - reviewvault-net
+
+networks:
+  reviewvault-net:
+    external: true

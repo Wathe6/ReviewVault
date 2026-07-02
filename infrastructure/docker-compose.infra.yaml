@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: reviewvault-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: reviewvault
+      POSTGRES_PASSWORD: reviewvault
+      POSTGRES_DB: reviewvault
+    volumes:
+      - reviewvault-postgres-data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d
+    networks:
+      - reviewvault-net
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: reviewvault-keycloak
+    ports:
+      - "8090:8080"
+    command: start-dev
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    networks:
+      - reviewvault-net
+
+networks:
+  reviewvault-net:
+    external: true
+
+volumes:
+  reviewvault-postgres-data:

@@ -1,14 +1,9 @@
-# ---------- Build stage ----------
-FROM eclipse-temurin:21-jdk AS builder
+FROM eclipse-temurin:26-jre
 
 WORKDIR /app
-COPY . .
-RUN ./gradlew clean bootJar --no-daemon
 
-# ---------- Runtime ----------
-FROM eclipse-temurin:21-jre
+COPY services/eureka/build/libs/*.jar app.jar
 
-WORKDIR /app
-COPY --from=builder /app/build/libs/*.jar app.jar
+EXPOSE 8761
 
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
