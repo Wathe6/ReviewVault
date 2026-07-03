@@ -16,3 +16,4 @@ rootProject.name = 'reviewvault'
 
 include 'services:gateway'
 include 'services:eureka'
+include 'services:media'

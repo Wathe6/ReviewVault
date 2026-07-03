@@ -22,26 +22,29 @@ spring:
 #              filters:
 #                - AddRequestHeader=X-Source-Service, gateway
 
+server:
+  port: ${SERVER_PORT}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
+
 management:
   endpoints:
     web:
       exposure:
         include: health,info,metrics,loggers
   endpoint:
+    health:
+      probes:
+        enabled: true
     loggers:
       enabled: true
 
 logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId}] %logger{36} - %msg%n"
   level:
     root: WARN
     io.envoi: INFO
-
-
-server:
-  port: ${SERVER_PORT}
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
-

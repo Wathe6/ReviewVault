@@ -18,8 +18,12 @@ management:
       exposure:
         include: health,info,metrics,loggers
   endpoint:
+    health:
+      probes:
+        enabled: true
     loggers:
       enabled: true
+
 
 logging:
   level:

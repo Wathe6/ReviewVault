@@ -10,8 +10,8 @@
 !**/build/libs/
 !**/build/libs/*.jar
 
-.env
-.env.*
+infrastructure/.env
+infrastructure/.env.example
 
 docs
 README.md

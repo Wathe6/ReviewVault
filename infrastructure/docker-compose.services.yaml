@@ -1,34 +1,80 @@
 services:
   eureka:
+    image: reviewvault-eureka
+    container_name: reviewvault-eureka
     build:
       context: ..
       dockerfile: services/eureka/Dockerfile
-    image: reviewvault-eureka
-    container_name: reviewvault-eureka
     ports:
-      - "8761:8761"
+      - "${EUREKA_PORT}:8761"
+    env_file:
+      - .env
     environment:
       SPRING_APPLICATION_NAME: eureka
       SERVER_PORT: 8761
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "false"
       EUREKA_CLIENT_FETCH_REGISTRY: "false"
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -fsS http://localhost:8761/actuator/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
     networks:
       - reviewvault-net
 
   gateway:
+    image: reviewvault-gateway
+    container_name: reviewvault-gateway
     build:
       context: ..
       dockerfile: services/gateway/Dockerfile
-    image: reviewvault-gateway
-    container_name: reviewvault-gateway
     ports:
-      - "8080:8080"
-    depends_on:
-      - eureka
+      - "${GATEWAY_PORT}:8080"
+    env_file:
+      - .env
     environment:
       SPRING_APPLICATION_NAME: gateway
       SERVER_PORT: 8080
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+    depends_on:
+      eureka:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -fsS http://localhost:8080/actuator/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - reviewvault-net
+
+  media:
+    image: reviewvault-media
+    container_name: reviewvault-media
+    build:
+      context: ..
+      dockerfile: services/media/Dockerfile
+    ports:
+      - "${MEDIA_PORT}:8080"
+    env_file:
+      - .env
+    environment:
+      SPRING_APPLICATION_NAME: media
+      SERVER_PORT: 8080
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${MEDIA_DB}
+      SPRING_DATASOURCE_USERNAME: ${MEDIA_DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${MEDIA_DB_PASSWORD}
+    depends_on:
+      eureka:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -fsS http://localhost:8080/actuator/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
     networks:
       - reviewvault-net
 

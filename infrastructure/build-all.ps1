@@ -20,10 +20,17 @@ try {
     .\gradlew.bat :services:gateway:bootJar
 
     Write-Host "--------------------------------------------"
+    Write-Host "Building Media..."
+    Write-Host "--------------------------------------------"
+
+    .\gradlew.bat :services:media:bootJar
+
+    Write-Host "--------------------------------------------"
     Write-Host "All projects built successfully."
     Write-Host "Artifacts:"
     Write-Host " - eureka:  services/eureka/build/libs/"
     Write-Host " - gateway: services/gateway/build/libs/"
+    Write-Host " - media:   services/media/build/libs/"
     Write-Host "--------------------------------------------"
 
     Write-Host "--------------------------------------------"
