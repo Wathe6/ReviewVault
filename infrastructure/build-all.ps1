@@ -7,11 +7,14 @@ $ComposeFile = "infrastructure/docker-compose.services.yaml"
 Push-Location $RootDir
 
 try {
+
+    .\gradlew.bat clean
+
     Write-Host "--------------------------------------------"
     Write-Host "Building Eureka..."
     Write-Host "--------------------------------------------"
 
-    .\gradlew.bat clean :services:eureka:bootJar
+    .\gradlew.bat :services:eureka:bootJar
 
     Write-Host "--------------------------------------------"
     Write-Host "Building Gateway..."

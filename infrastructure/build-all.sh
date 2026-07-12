@@ -11,7 +11,8 @@ echo "--------------------------------------------"
 
 ./gradlew clean \
   :services:eureka:bootJar \
-  :services:gateway:bootJar
+  :services:gateway:bootJar \
+  :services:media:bootJar
 
 echo "--------------------------------------------"
 echo "Starting Services Docker Compose..."

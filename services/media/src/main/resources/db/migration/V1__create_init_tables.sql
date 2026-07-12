@@ -1,0 +1,492 @@
+CREATE SEQUENCE IF NOT EXISTS revinfo_seq START WITH 1 INCREMENT BY 50;
+
+CREATE TABLE revchanges
+(
+    rev        BIGINT NOT NULL,
+    entityname VARCHAR(255)
+);
+
+CREATE TABLE revinfo
+(
+    rev      BIGINT NOT NULL,
+    revtstmp BIGINT,
+    CONSTRAINT pk_revinfo PRIMARY KEY (rev)
+);
+
+ALTER TABLE revchanges
+    ADD CONSTRAINT fk_revchanges_on_default_tracking_modified_entities_changelog FOREIGN KEY (rev) REFERENCES revinfo (rev);
+
+CREATE TABLE media.company
+(
+    id           UUID                        NOT NULL,
+    created_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    name         VARCHAR(255)                NOT NULL,
+    description  TEXT,
+    founded_date date,
+    closed_date  date,
+    cover_url    VARCHAR(255),
+    CONSTRAINT pk_company PRIMARY KEY (id)
+);
+
+CREATE TABLE media.company_translation
+(
+    id          BIGINT                      NOT NULL,
+    language_id SMALLINT                    NOT NULL,
+    name        VARCHAR(255),
+    created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    company_id  UUID                        NOT NULL,
+    description TEXT,
+    CONSTRAINT pk_company_translation PRIMARY KEY (id)
+);
+
+CREATE TABLE media.credit_role
+(
+    id              SMALLINT                    NOT NULL,
+    created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    original_name   VARCHAR(255)                NOT NULL,
+    normalized_name VARCHAR(255)                NOT NULL,
+    CONSTRAINT pk_credit_role PRIMARY KEY (id)
+);
+
+CREATE TABLE media.credit_role_translation
+(
+    id             BIGINT                      NOT NULL,
+    language_id    SMALLINT                    NOT NULL,
+    name           VARCHAR(255),
+    created_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    credit_role_id SMALLINT                    NOT NULL,
+    CONSTRAINT pk_credit_role_translation PRIMARY KEY (id)
+);
+
+CREATE TABLE media.language
+(
+    id          SMALLINT                    NOT NULL,
+    created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    code        VARCHAR(2)                  NOT NULL,
+    name        VARCHAR(255)                NOT NULL,
+    native_name VARCHAR(255)                NOT NULL,
+    CONSTRAINT pk_language PRIMARY KEY (id)
+);
+
+CREATE TABLE media.link
+(
+    id                 BIGINT                      NOT NULL,
+    created_at         TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at         TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    media_item_id      UUID                        NOT NULL,
+    media_link_type_id SMALLINT,
+    url                VARCHAR(255)                NOT NULL,
+    CONSTRAINT pk_link PRIMARY KEY (id)
+);
+
+CREATE TABLE media.link_type
+(
+    id         SMALLINT                    NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    name       VARCHAR(50)                 NOT NULL,
+    CONSTRAINT pk_link_type PRIMARY KEY (id)
+);
+
+CREATE TABLE media.media_category
+(
+    id              SMALLINT                    NOT NULL,
+    created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    default_name    VARCHAR(255)                NOT NULL,
+    normalized_name VARCHAR(255)                NOT NULL,
+    CONSTRAINT pk_media_category PRIMARY KEY (id)
+);
+
+CREATE TABLE media.media_category_translation
+(
+    id                BIGINT                      NOT NULL,
+    language_id       SMALLINT                    NOT NULL,
+    name              VARCHAR(255),
+    created_at        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    media_category_id SMALLINT                    NOT NULL,
+    CONSTRAINT pk_media_category_translation PRIMARY KEY (id)
+);
+
+CREATE TABLE media.media_credit
+(
+    id             BIGINT                      NOT NULL,
+    created_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    media_item_id  UUID                        NOT NULL,
+    person_id      UUID,
+    company_id     UUID,
+    credit_role_id SMALLINT                    NOT NULL,
+    CONSTRAINT pk_media_credit PRIMARY KEY (id)
+);
+
+CREATE TABLE media.media_external
+(
+    id                 BIGINT                      NOT NULL,
+    created_at         TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at         TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    media_item_id      UUID                        NOT NULL,
+    media_link_type_id SMALLINT                    NOT NULL,
+    external_id        VARCHAR(255)                NOT NULL,
+    CONSTRAINT pk_media_external PRIMARY KEY (id)
+);
+
+CREATE TABLE media.media_format
+(
+    id                SMALLINT                    NOT NULL,
+    created_at        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    media_category_id SMALLINT                    NOT NULL,
+    default_name      VARCHAR(255)                NOT NULL,
+    normalized_name   VARCHAR(255)                NOT NULL,
+    CONSTRAINT pk_media_format PRIMARY KEY (id)
+);
+
+CREATE TABLE media.media_format_translation
+(
+    id              BIGINT                      NOT NULL,
+    language_id     SMALLINT                    NOT NULL,
+    name            VARCHAR(255),
+    created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    media_format_id SMALLINT                    NOT NULL,
+    CONSTRAINT pk_media_format_translation PRIMARY KEY (id)
+);
+
+CREATE TABLE media.media_genre
+(
+    id              SMALLINT                    NOT NULL,
+    created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    original_name   VARCHAR(255)                NOT NULL,
+    normalized_name VARCHAR(255)                NOT NULL,
+    description     TEXT                        NOT NULL,
+    CONSTRAINT pk_media_genre PRIMARY KEY (id)
+);
+
+CREATE TABLE media.media_genre_category
+(
+    id                BIGINT                      NOT NULL,
+    created_at        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    media_genre_id    SMALLINT                    NOT NULL,
+    media_category_id SMALLINT                    NOT NULL,
+    CONSTRAINT pk_media_genre_category PRIMARY KEY (id)
+);
+
+CREATE TABLE media.media_genre_translation
+(
+    id             BIGINT                      NOT NULL,
+    language_id    SMALLINT                    NOT NULL,
+    name           VARCHAR(255),
+    created_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    media_genre_id SMALLINT                    NOT NULL,
+    CONSTRAINT pk_media_genre_translation PRIMARY KEY (id)
+);
+
+CREATE TABLE media.media_group
+(
+    id                   UUID                        NOT NULL,
+    created_at           TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at           TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    cover_url            VARCHAR(255)                NOT NULL,
+    title                VARCHAR(255)                NOT NULL,
+    description          TEXT,
+    original_language_id SMALLINT                    NOT NULL,
+    CONSTRAINT pk_media_group PRIMARY KEY (id)
+);
+
+CREATE TABLE media.media_group_titles
+(
+    id              BIGINT                      NOT NULL,
+    created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    media_group_id  UUID                        NOT NULL,
+    title           VARCHAR(255)                NOT NULL,
+    normalized_name VARCHAR(255)                NOT NULL,
+    CONSTRAINT pk_media_group_titles PRIMARY KEY (id)
+);
+
+CREATE TABLE media.media_group_translation
+(
+    id             BIGINT                      NOT NULL,
+    language_id    SMALLINT                    NOT NULL,
+    name           VARCHAR(255),
+    created_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    media_group_id UUID                        NOT NULL,
+    description    TEXT,
+    CONSTRAINT pk_media_group_translation PRIMARY KEY (id)
+);
+
+CREATE TABLE media.media_item
+(
+    id                   UUID                        NOT NULL,
+    created_at           TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at           TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    title                VARCHAR(255)                NOT NULL,
+    media_group_id       UUID,
+    media_format_id      SMALLINT                    NOT NULL,
+    media_category_id    SMALLINT                    NOT NULL,
+    media_item_status_id SMALLINT                    NOT NULL,
+    description          TEXT,
+    release_date         date,
+    end_date             date,
+    original_language_id SMALLINT                    NOT NULL,
+    cover_url            VARCHAR(255),
+    metadata             JSONB,
+    CONSTRAINT pk_media_item PRIMARY KEY (id)
+);
+
+CREATE TABLE media.media_item_genre
+(
+    id             BIGINT                      NOT NULL,
+    created_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    media_item_id  UUID                        NOT NULL,
+    media_genre_id SMALLINT                    NOT NULL,
+    CONSTRAINT pk_media_item_genre PRIMARY KEY (id)
+);
+
+CREATE TABLE media.media_item_status
+(
+    id         SMALLINT                    NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    name       VARCHAR(255)                NOT NULL,
+    CONSTRAINT pk_media_item_status PRIMARY KEY (id)
+);
+
+CREATE TABLE media.media_item_status_translation
+(
+    id                   SMALLINT                    NOT NULL,
+    language_id          SMALLINT                    NOT NULL,
+    name                 VARCHAR(255),
+    created_at           TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at           TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    media_item_status_id SMALLINT                    NOT NULL,
+    CONSTRAINT pk_media_item_status_translation PRIMARY KEY (id)
+);
+
+CREATE TABLE media.media_item_titles
+(
+    id              BIGINT                      NOT NULL,
+    created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    media_item_id   UUID                        NOT NULL,
+    title           VARCHAR(255)                NOT NULL,
+    normalized_name VARCHAR(255)                NOT NULL,
+    CONSTRAINT pk_media_item_titles PRIMARY KEY (id)
+);
+
+CREATE TABLE media.media_item_translation
+(
+    id            BIGINT                      NOT NULL,
+    language_id   SMALLINT                    NOT NULL,
+    name          VARCHAR(255),
+    created_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    media_item_id UUID                        NOT NULL,
+    description   TEXT,
+    CONSTRAINT pk_media_item_translation PRIMARY KEY (id)
+);
+
+CREATE TABLE media.person
+(
+    id         UUID                        NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    name       VARCHAR(255)                NOT NULL,
+    biography  TEXT,
+    birth_date date,
+    death_date date,
+    cover_url  VARCHAR(255),
+    CONSTRAINT pk_person PRIMARY KEY (id)
+);
+
+CREATE TABLE media.person_translation
+(
+    id          BIGINT                      NOT NULL,
+    language_id SMALLINT                    NOT NULL,
+    name        VARCHAR(255),
+    created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    person_id   UUID                        NOT NULL,
+    biography   TEXT,
+    CONSTRAINT pk_person_translation PRIMARY KEY (id)
+);
+
+ALTER TABLE media.media_group_translation
+    ADD CONSTRAINT uc_0a5cfee1b67d8fe300c2c4a20 UNIQUE (media_group_id, language_id);
+
+ALTER TABLE media.media_group_titles
+    ADD CONSTRAINT uc_11ce197a3d3433688a324a82e UNIQUE (media_group_id, normalized_name);
+
+ALTER TABLE media.company_translation
+    ADD CONSTRAINT uc_16c06d2f1e8fb74a364a24e98 UNIQUE (company_id, language_id);
+
+ALTER TABLE media.credit_role_translation
+    ADD CONSTRAINT uc_5bee345d82628e4c0af4e4320 UNIQUE (credit_role_id, language_id);
+
+ALTER TABLE media.media_item_titles
+    ADD CONSTRAINT uc_6712207b17f4509bf910cd77d UNIQUE (media_item_id, normalized_name);
+
+ALTER TABLE media.media_format_translation
+    ADD CONSTRAINT uc_73a1e2e8eb5262c2a672a52f6 UNIQUE (media_format_id, language_id);
+
+ALTER TABLE media.media_category_translation
+    ADD CONSTRAINT uc_765b2953851196e3b9fa1f37f UNIQUE (media_category_id, language_id);
+
+ALTER TABLE media.media_external
+    ADD CONSTRAINT uc_7d4bdd4ff34b8c5e0b20cf408 UNIQUE (external_id);
+
+ALTER TABLE media.media_item_status_translation
+    ADD CONSTRAINT uc_95339b3ee403985d38e7b90f5 UNIQUE (media_item_status_id, language_id);
+
+ALTER TABLE media.media_genre_category
+    ADD CONSTRAINT uc_9c98ba2243c1fb15fa39c330e UNIQUE (media_genre_id, media_category_id);
+
+ALTER TABLE media.media_item_translation
+    ADD CONSTRAINT uc_a9d0de5c09ad36d5e841fa63d UNIQUE (media_item_id, language_id);
+
+ALTER TABLE media.person_translation
+    ADD CONSTRAINT uc_ab9ec6ce3855cc8b963043435 UNIQUE (person_id, language_id);
+
+ALTER TABLE media.credit_role
+    ADD CONSTRAINT uc_credit_role_normalized_name UNIQUE (normalized_name);
+
+ALTER TABLE media.media_item_genre
+    ADD CONSTRAINT uc_d3002084dc9c43e8b0a314e1b UNIQUE (media_item_id, media_genre_id);
+
+ALTER TABLE media.media_category
+    ADD CONSTRAINT uc_media_category_normalized_name UNIQUE (normalized_name);
+
+ALTER TABLE media.media_format
+    ADD CONSTRAINT uc_media_format_normalized_name UNIQUE (normalized_name);
+
+ALTER TABLE media.media_genre
+    ADD CONSTRAINT uc_media_genre_normalized_name UNIQUE (normalized_name);
+
+ALTER TABLE media.company_translation
+    ADD CONSTRAINT FK_COMPANY_TRANSLATION_ON_COMPANY FOREIGN KEY (company_id) REFERENCES media.company (id);
+
+ALTER TABLE media.company_translation
+    ADD CONSTRAINT FK_COMPANY_TRANSLATION_ON_LANGUAGE FOREIGN KEY (language_id) REFERENCES media.language (id);
+
+ALTER TABLE media.credit_role_translation
+    ADD CONSTRAINT FK_CREDIT_ROLE_TRANSLATION_ON_CREDIT_ROLE FOREIGN KEY (credit_role_id) REFERENCES media.credit_role (id);
+
+ALTER TABLE media.credit_role_translation
+    ADD CONSTRAINT FK_CREDIT_ROLE_TRANSLATION_ON_LANGUAGE FOREIGN KEY (language_id) REFERENCES media.language (id);
+
+ALTER TABLE media.link
+    ADD CONSTRAINT FK_LINK_ON_MEDIA_ITEM FOREIGN KEY (media_item_id) REFERENCES media.media_item (id);
+
+ALTER TABLE media.link
+    ADD CONSTRAINT FK_LINK_ON_MEDIA_LINK_TYPE FOREIGN KEY (media_link_type_id) REFERENCES media.link_type (id);
+
+ALTER TABLE media.media_category_translation
+    ADD CONSTRAINT FK_MEDIA_CATEGORY_TRANSLATION_ON_LANGUAGE FOREIGN KEY (language_id) REFERENCES media.language (id);
+
+ALTER TABLE media.media_category_translation
+    ADD CONSTRAINT FK_MEDIA_CATEGORY_TRANSLATION_ON_MEDIA_CATEGORY FOREIGN KEY (media_category_id) REFERENCES media.media_category (id);
+
+ALTER TABLE media.media_credit
+    ADD CONSTRAINT FK_MEDIA_CREDIT_ON_COMPANY FOREIGN KEY (company_id) REFERENCES media.company (id);
+
+ALTER TABLE media.media_credit
+    ADD CONSTRAINT FK_MEDIA_CREDIT_ON_CREDIT_ROLE FOREIGN KEY (credit_role_id) REFERENCES media.credit_role (id);
+
+ALTER TABLE media.media_credit
+    ADD CONSTRAINT FK_MEDIA_CREDIT_ON_MEDIA_ITEM FOREIGN KEY (media_item_id) REFERENCES media.media_item (id);
+
+ALTER TABLE media.media_credit
+    ADD CONSTRAINT FK_MEDIA_CREDIT_ON_PERSON FOREIGN KEY (person_id) REFERENCES media.person (id);
+
+ALTER TABLE media.media_external
+    ADD CONSTRAINT FK_MEDIA_EXTERNAL_ON_MEDIA_ITEM FOREIGN KEY (media_item_id) REFERENCES media.media_item (id);
+
+ALTER TABLE media.media_external
+    ADD CONSTRAINT FK_MEDIA_EXTERNAL_ON_MEDIA_LINK_TYPE FOREIGN KEY (media_link_type_id) REFERENCES media.link_type (id);
+
+ALTER TABLE media.media_format
+    ADD CONSTRAINT FK_MEDIA_FORMAT_ON_MEDIA_CATEGORY FOREIGN KEY (media_category_id) REFERENCES media.media_category (id);
+
+ALTER TABLE media.media_format_translation
+    ADD CONSTRAINT FK_MEDIA_FORMAT_TRANSLATION_ON_LANGUAGE FOREIGN KEY (language_id) REFERENCES media.language (id);
+
+ALTER TABLE media.media_format_translation
+    ADD CONSTRAINT FK_MEDIA_FORMAT_TRANSLATION_ON_MEDIA_FORMAT FOREIGN KEY (media_format_id) REFERENCES media.media_format (id);
+
+ALTER TABLE media.media_genre_category
+    ADD CONSTRAINT FK_MEDIA_GENRE_CATEGORY_ON_MEDIA_CATEGORY FOREIGN KEY (media_category_id) REFERENCES media.media_category (id);
+
+ALTER TABLE media.media_genre_category
+    ADD CONSTRAINT FK_MEDIA_GENRE_CATEGORY_ON_MEDIA_GENRE FOREIGN KEY (media_genre_id) REFERENCES media.media_genre (id);
+
+ALTER TABLE media.media_genre_translation
+    ADD CONSTRAINT FK_MEDIA_GENRE_TRANSLATION_ON_LANGUAGE FOREIGN KEY (language_id) REFERENCES media.language (id);
+
+ALTER TABLE media.media_genre_translation
+    ADD CONSTRAINT FK_MEDIA_GENRE_TRANSLATION_ON_MEDIA_GENRE FOREIGN KEY (media_genre_id) REFERENCES media.media_genre (id);
+
+ALTER TABLE media.media_group
+    ADD CONSTRAINT FK_MEDIA_GROUP_ON_ORIGINAL_LANGUAGE FOREIGN KEY (original_language_id) REFERENCES media.language (id);
+
+ALTER TABLE media.media_group_titles
+    ADD CONSTRAINT FK_MEDIA_GROUP_TITLES_ON_MEDIA_GROUP FOREIGN KEY (media_group_id) REFERENCES media.media_group (id);
+
+ALTER TABLE media.media_group_translation
+    ADD CONSTRAINT FK_MEDIA_GROUP_TRANSLATION_ON_LANGUAGE FOREIGN KEY (language_id) REFERENCES media.language (id);
+
+ALTER TABLE media.media_group_translation
+    ADD CONSTRAINT FK_MEDIA_GROUP_TRANSLATION_ON_MEDIA_GROUP FOREIGN KEY (media_group_id) REFERENCES media.media_group (id);
+
+ALTER TABLE media.media_item_genre
+    ADD CONSTRAINT FK_MEDIA_ITEM_GENRE_ON_MEDIA_GENRE FOREIGN KEY (media_genre_id) REFERENCES media.media_genre (id);
+
+ALTER TABLE media.media_item_genre
+    ADD CONSTRAINT FK_MEDIA_ITEM_GENRE_ON_MEDIA_ITEM FOREIGN KEY (media_item_id) REFERENCES media.media_item (id);
+
+ALTER TABLE media.media_item
+    ADD CONSTRAINT FK_MEDIA_ITEM_ON_MEDIA_CATEGORY FOREIGN KEY (media_category_id) REFERENCES media.media_category (id);
+
+ALTER TABLE media.media_item
+    ADD CONSTRAINT FK_MEDIA_ITEM_ON_MEDIA_FORMAT FOREIGN KEY (media_format_id) REFERENCES media.media_format (id);
+
+ALTER TABLE media.media_item
+    ADD CONSTRAINT FK_MEDIA_ITEM_ON_MEDIA_GROUP FOREIGN KEY (media_group_id) REFERENCES media.media_group (id);
+
+ALTER TABLE media.media_item
+    ADD CONSTRAINT FK_MEDIA_ITEM_ON_MEDIA_ITEM_STATUS FOREIGN KEY (media_item_status_id) REFERENCES media.media_item_status (id);
+
+ALTER TABLE media.media_item
+    ADD CONSTRAINT FK_MEDIA_ITEM_ON_ORIGINAL_LANGUAGE FOREIGN KEY (original_language_id) REFERENCES media.language (id);
+
+ALTER TABLE media.media_item_status_translation
+    ADD CONSTRAINT FK_MEDIA_ITEM_STATUS_TRANSLATION_ON_LANGUAGE FOREIGN KEY (language_id) REFERENCES media.language (id);
+
+ALTER TABLE media.media_item_status_translation
+    ADD CONSTRAINT FK_MEDIA_ITEM_STATUS_TRANSLATION_ON_MEDIA_ITEM_STATUS FOREIGN KEY (media_item_status_id) REFERENCES media.media_item_status (id);
+
+ALTER TABLE media.media_item_titles
+    ADD CONSTRAINT FK_MEDIA_ITEM_TITLES_ON_MEDIA_ITEM FOREIGN KEY (media_item_id) REFERENCES media.media_item (id);
+
+ALTER TABLE media.media_item_translation
+    ADD CONSTRAINT FK_MEDIA_ITEM_TRANSLATION_ON_LANGUAGE FOREIGN KEY (language_id) REFERENCES media.language (id);
+
+ALTER TABLE media.media_item_translation
+    ADD CONSTRAINT FK_MEDIA_ITEM_TRANSLATION_ON_MEDIA_ITEM FOREIGN KEY (media_item_id) REFERENCES media.media_item (id);
+
+ALTER TABLE media.person_translation
+    ADD CONSTRAINT FK_PERSON_TRANSLATION_ON_LANGUAGE FOREIGN KEY (language_id) REFERENCES media.language (id);
+
+ALTER TABLE media.person_translation
+    ADD CONSTRAINT FK_PERSON_TRANSLATION_ON_PERSON FOREIGN KEY (person_id) REFERENCES media.person (id);
