@@ -24,7 +24,7 @@ import lombok.Setter;
         schema = "media",
         check = @CheckConstraint(constraint = "person_id IS NOT NULL OR company_id IS NOT NULL")
 )
-public class MediaCredit extends BaseNumericIdEntity<Long> {
+public class MediaCreditEntity extends BaseNumericIdEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
