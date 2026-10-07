@@ -28,5 +28,5 @@ public class MediaFormatTranslationEntity extends BaseTranslationEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     @JoinColumn(name = "media_format_id", nullable = false)
-    private MediaFormatEntity mediaFormatEntity;
+    private MediaFormatEntity mediaFormat;
 }

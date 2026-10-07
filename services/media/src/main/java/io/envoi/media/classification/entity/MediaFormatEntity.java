@@ -1,6 +1,6 @@
 package io.envoi.media.classification.entity;
 
-import io.envoi.media.common.entity.BaseNumericIdEntity;
+import io.envoi.contracts.common.BaseNumericIdEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

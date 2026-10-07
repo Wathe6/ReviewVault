@@ -23,6 +23,19 @@ spring:
     schemas: public, media
     locations: classpath:db/migration
 
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER}
+    producer:
+      key-serializer: "${KAFKA_KEY_SERIALIZER}"
+      value-serializer: "${KAFKA_VALUE_SERIALIZER}"
+      properties:
+        spring.json.add.type.headers: false
+
+app:
+  kafka:
+    topics:
+      media-item-events: ${KAFKA_TOPIC_MEDIA_ITEM_EVENTS:reviewvault.media-item-events.v1}
+
 server:
   port: ${SERVER_PORT:8080}
 

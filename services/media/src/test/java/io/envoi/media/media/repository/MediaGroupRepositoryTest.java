@@ -3,7 +3,7 @@ package io.envoi.media.media.repository;
 import io.envoi.media.common.entity.LanguageEntity;
 import io.envoi.media.common.repository.LanguageRepository;
 import io.envoi.media.media.entity.MediaGroupEntity;
-import lombok.RequiredArgsConstructor;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,10 +26,10 @@ public class MediaGroupRepositoryTest {
     @Autowired
     private LanguageRepository languageRepository;
 
-    private MediaGroupEntity testMediaGroup;
-
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    private EntityManager em;
+
+    private MediaGroupEntity testMediaGroup;
 
     @BeforeEach
     public void setUp() {
@@ -45,30 +45,31 @@ public class MediaGroupRepositoryTest {
         testMediaGroup.setCoverUrl("Test Media Group Cover Url");
         testMediaGroup.setOriginalLanguage(testLanguage);
         mediaGroupRepository.save(testMediaGroup);
-    }
 
-    @AfterEach
-    public void tearDown() {
-        mediaGroupRepository.delete(testMediaGroup);
-        languageRepository.delete(testMediaGroup.getOriginalLanguage());
+        em.flush();
+        em.clear();
     }
 
     @Test
-    @DisplayName(value = "Test getMediaGroupById")
+    @DisplayName(value = "Test MediaGroupRepository save")
     void givenMediaGroup_whenSaved_thenCanBeFoundById() {
         MediaGroupEntity savedMediaGroup = mediaGroupRepository.findById(testMediaGroup.getId()).orElse(null);
+
         assertNotNull(savedMediaGroup);
         assertEquals(testMediaGroup.getTitle(), savedMediaGroup.getTitle());
         assertEquals(testMediaGroup.getDescription(), savedMediaGroup.getDescription());
         assertEquals(testMediaGroup.getCoverUrl(), savedMediaGroup.getCoverUrl());
-        assertEquals(testMediaGroup.getOriginalLanguage(), savedMediaGroup.getOriginalLanguage());
+        assertEquals(testMediaGroup.getOriginalLanguage().getCode(), savedMediaGroup.getOriginalLanguage().getCode());
     }
 
     @Test
-    @DisplayName(value = "Test MediaGroup update")
+    @DisplayName(value = "Test MediaGroupRepository update")
     void givenMediaGroup_whenUpdated_thenCanBeFoundByIdWithUpdatedData() {
         testMediaGroup.setTitle("Test Updated Media Group Title");
         mediaGroupRepository.save(testMediaGroup);
+
+        em.flush();
+        em.clear();
 
         MediaGroupEntity updatedMediaGroup = mediaGroupRepository.findById(testMediaGroup.getId()).orElse(null);
 
@@ -77,7 +78,7 @@ public class MediaGroupRepositoryTest {
     }
 
     @Test
-    @DisplayName(value = "Test MediaGroup findByTitle")
+    @DisplayName(value = "Test MediaGroupRepository findByTitle")
     void givenMediaGroup_whenSaved_thenCanBeFoundByTitle() {
         MediaGroupEntity mediaGroup = mediaGroupRepository.findByTitle("Test Media Group Title").getFirst();
 

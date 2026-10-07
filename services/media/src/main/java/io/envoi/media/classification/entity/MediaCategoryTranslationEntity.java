@@ -28,5 +28,5 @@ public class MediaCategoryTranslationEntity extends BaseTranslationEntity<Long> 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     @JoinColumn(name = "media_category_id", nullable = false)
-    private MediaCategoryEntity mediaCategoryEntity;
+    private MediaCategoryEntity mediaCategory;
 }

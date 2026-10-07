@@ -1,6 +1,6 @@
 package io.envoi.media.media.entity;
 
-import io.envoi.media.common.entity.BaseUuidEntity;
+import io.envoi.contracts.common.BaseUuidEntity;
 import io.envoi.media.common.entity.LanguageEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,10 +23,6 @@ import lombok.Setter;
 public class MediaGroupEntity extends BaseUuidEntity {
 
     @NotNull
-    @Column(name = "cover_url", nullable = false)
-    private String coverUrl;
-
-    @NotNull
     @Column(name = "title", nullable = false)
     private String title;
 
@@ -37,4 +33,8 @@ public class MediaGroupEntity extends BaseUuidEntity {
     @NotNull
     @JoinColumn(name = "original_language_id", nullable = false)
     private LanguageEntity originalLanguage;
+
+    @Column(name = "cover_url", nullable = true)
+    private String coverUrl;
+
 }

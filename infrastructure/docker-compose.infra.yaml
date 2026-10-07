@@ -36,9 +36,96 @@ services:
     networks:
       - reviewvault-net
 
+  keycloak-init:
+    image: quay.io/keycloak/keycloak:latest
+    profiles:
+      - init
+    env_file:
+      - .env
+    entrypoint: ["/bin/bash", "/opt/keycloak/init/init.sh"]
+    healthcheck:
+      test:
+        - CMD
+        - bash
+        - -c
+        - "{ printf 'HEAD /health/ready HTTP/1.0\\r\\n\\r\\n' >&0; grep 'HTTP/1.0 200'; } 0<>/dev/tcp/localhost/9000"
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 20s
+    volumes:
+      - ./keycloak/init.sh:/opt/keycloak/init/init.sh:ro
+    depends_on:
+      keycloak:
+        condition: service_healthy
+    restart: "no"
+    networks:
+      - reviewvault-net
+
+  kafka:
+    image: apache/kafka-native:4.3.1
+    container_name: kafka
+    user: root
+    ports:
+      - "${KAFKA_INT_PORT}:19092"
+      - "${KAFKA_EXT_PORT}:9092"
+      - "${KAFKA_CONTROLLER_PORT}:29092"
+    env_file:
+      - .env
+    environment:
+      KAFKA_KRAFT_MODE: "true"
+      KAFKA_PROCESS_ROLES: controller,broker
+      KAFKA_NODE_ID: 1
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@localhost:${KAFKA_CONTROLLER_PORT}"
+
+      KAFKA_LISTENERS: >-
+        INTERNAL://0.0.0.0:${KAFKA_INT_PORT},
+        EXTERNAL://0.0.0.0:${KAFKA_EXT_PORT},
+        CONTROLLER://0.0.0.0:${KAFKA_CONTROLLER_PORT}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: >-
+        INTERNAL:PLAINTEXT,
+        EXTERNAL:PLAINTEXT,
+        CONTROLLER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+
+      KAFKA_ADVERTISED_LISTENERS: >-
+        INTERNAL://kafka:${KAFKA_INT_PORT},
+        EXTERNAL://localhost:${KAFKA_EXT_PORT}
+
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_LOG_RETENTION_HOURS: 168
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      CLUSTER_ID: "a0Ylf8FtRuqIhkSqkLfoeA"
+      KAFKA_LOG4J_ROOT_LOGLEVEL: WARN
+    volumes:
+      - reviewvault-kafka-data:/var/lib/kafka/data
+    depends_on:
+      - postgres
+    networks:
+      - reviewvault-net
+
+  kafka-rest:
+    image: confluentinc/cp-kafka-rest:7.6.0
+    container_name: kafka_rest
+    ports:
+      - "${KAFKA_REST_PORT}:8088"
+    environment:
+      KAFKA_REST_HOST_NAME: kafka-rest
+      KAFKA_REST_BOOTSTRAP_SERVERS: "PLAINTEXT://kafka:19092"
+      KAFKA_REST_LISTENERS: "http://0.0.0.0:${KAFKA_REST_PORT}"
+      KAFKA_REST_SCHEMA_REGISTRY_URL: ""
+    depends_on:
+      - kafka
+    networks:
+      - reviewvault-net
+
 networks:
   reviewvault-net:
     external: true
 
 volumes:
   reviewvault-postgres-data:
+  reviewvault-kafka-data:

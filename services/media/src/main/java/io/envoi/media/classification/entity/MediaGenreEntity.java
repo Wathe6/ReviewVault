@@ -1,6 +1,6 @@
 package io.envoi.media.classification.entity;
 
-import io.envoi.media.common.entity.BaseNumericIdEntity;
+import io.envoi.contracts.common.BaseNumericIdEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -19,8 +19,8 @@ import lombok.Setter;
 public class MediaGenreEntity extends BaseNumericIdEntity<Short> {
 
     @NotNull
-    @Column(name = "original_name", nullable = false)
-    private String originalName;
+    @Column(name = "default_name", nullable = false)
+    private String defaultName;
 
     @NotNull
     @Column(name = "normalized_name", nullable = false, unique = true)

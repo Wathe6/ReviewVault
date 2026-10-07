@@ -27,5 +27,5 @@ public class MediaItemStatusTranslationEntity extends BaseTranslationEntity<Shor
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     @JoinColumn(name = "media_item_status_id", nullable = false)
-    private MediaItemStatusEntity mediaItemStatusEntity;
+    private MediaItemStatusEntity mediaItemStatus;
 }

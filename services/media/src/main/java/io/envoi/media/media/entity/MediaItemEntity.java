@@ -1,6 +1,6 @@
 package io.envoi.media.media.entity;
 
-import io.envoi.media.common.entity.BaseUuidEntity;
+import io.envoi.contracts.common.BaseUuidEntity;
 import io.envoi.media.classification.entity.MediaCategoryEntity;
 import io.envoi.media.classification.entity.MediaFormatEntity;
 import io.envoi.media.common.entity.LanguageEntity;
@@ -71,5 +71,5 @@ public class MediaItemEntity extends BaseUuidEntity {
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "metadata", nullable = true, columnDefinition = "JSONB")
-    private Map<Object, String> metadata;
+    private Map<String, String> metadata;
 }

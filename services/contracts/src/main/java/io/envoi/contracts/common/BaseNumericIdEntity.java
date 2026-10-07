@@ -1,4 +1,4 @@
-package io.envoi.media.common.entity;
+package io.envoi.contracts.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
@@ -6,15 +6,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
-
-import java.util.UUID;
+import lombok.Setter;
 
 @MappedSuperclass
 @Getter
-public abstract class BaseUuidEntity extends BaseAuditEntity{
+@Setter
+public abstract class BaseNumericIdEntity<ID extends Number> extends BaseAuditEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
-    private UUID id;
+    private ID id;
 }

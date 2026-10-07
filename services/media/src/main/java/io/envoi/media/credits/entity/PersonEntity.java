@@ -1,6 +1,6 @@
 package io.envoi.media.credits.entity;
 
-import io.envoi.media.common.entity.BaseUuidEntity;
+import io.envoi.contracts.common.BaseUuidEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

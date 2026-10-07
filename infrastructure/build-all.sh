@@ -9,10 +9,16 @@ echo "--------------------------------------------"
 echo "Building Spring Boot services..."
 echo "--------------------------------------------"
 
-./gradlew clean \
+if ! ./gradlew clean \
+  :services:contracts:jar \
   :services:eureka:bootJar \
   :services:gateway:bootJar \
-  :services:media:bootJar
+  :services:media:bootJar \
+  :services:review:bootJar \
+  :services:profile:bootJar; then
+  echo "Gradle build failed. Docker Compose was not started." >&2
+  exit 1
+fi
 
 echo "--------------------------------------------"
 echo "Starting Services Docker Compose..."

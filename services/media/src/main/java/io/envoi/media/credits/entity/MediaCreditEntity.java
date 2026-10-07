@@ -1,7 +1,7 @@
 package io.envoi.media.credits.entity;
 
 import io.envoi.media.media.entity.MediaItemEntity;
-import io.envoi.media.common.entity.BaseNumericIdEntity;
+import io.envoi.contracts.common.BaseNumericIdEntity;
 import jakarta.persistence.CheckConstraint;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

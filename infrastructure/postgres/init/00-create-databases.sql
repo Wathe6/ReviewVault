@@ -10,6 +10,6 @@ CREATE USER profile_user WITH PASSWORD 'profile_pass';
 CREATE DATABASE profile_db OWNER profile_user;
 GRANT ALL PRIVILEGES ON DATABASE profile_db TO profile_user;
 
-CREATE USER reivew_user WITH PASSWORD 'reivew_pass';
-CREATE DATABASE reivew_db OWNER reivew_user;
-GRANT ALL PRIVILEGES ON DATABASE reivew_db TO reivew_user;
+CREATE USER review_user WITH PASSWORD 'review_pass';
+CREATE DATABASE review_db OWNER review_user;
+GRANT ALL PRIVILEGES ON DATABASE review_db TO review_user;

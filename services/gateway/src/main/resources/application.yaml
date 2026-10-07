@@ -1,6 +1,6 @@
 spring:
   application:
-    name: ${SPRING_APPLICATION_NAME}
+    name: ${SPRING_APPLICATION_NAME:gateway}
 
   web:
     resources:
@@ -15,20 +15,33 @@ spring:
       server:
         webmvc:
           routes:
-#            - id: hello-service
-#              uri: lb://hello-service
-#              predicates:
-#                - Path=/hello/**
-#              filters:
-#                - AddRequestHeader=X-Source-Service, gateway
+            - id: media
+              uri: lb://media
+              predicates:
+                - Path=/api/v1/items/**, /api/v1/groups/**
+              filters:
+                - AddRequestHeader=X-Source-Service, gateway
+            - id: review
+              uri: lb://review
+              predicates:
+                - Path=/api/v1/**
+              filters:
+                - AddRequestHeader=X-Source-Service, gateway
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8090/realms/${KEYCLOAK_REALM}
+          jwk-set-uri: http://keycloak:8080/realms/${KEYCLOAK_REALM}/protocol/openid-connect/certs
 
 server:
-  port: ${SERVER_PORT}
+  port: ${SERVER_PORT:8080}
 
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://eureka:8761/eureka/}
 
 management:
   endpoints:
@@ -41,6 +54,8 @@ management:
         enabled: true
     loggers:
       enabled: true
+
+
 
 logging:
   pattern:

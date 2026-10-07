@@ -1,6 +1,6 @@
 package io.envoi.media.media.entity;
 
-import io.envoi.media.common.entity.BaseNumericIdEntity;
+import io.envoi.contracts.common.BaseNumericIdEntity;
 import io.envoi.media.classification.entity.MediaGenreEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,10 +29,10 @@ public class MediaItemGenreEntity extends BaseNumericIdEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     @JoinColumn(name = "media_item_id", nullable = false)
-    private MediaItemEntity mediaItemEntity;
+    private MediaItemEntity mediaItem;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     @JoinColumn(name = "media_genre_id", nullable = false)
-    private MediaGenreEntity mediaGenreEntity;
+    private MediaGenreEntity mediaGenre;
 }

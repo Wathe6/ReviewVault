@@ -142,7 +142,7 @@ INSERT INTO media.credit_role(
                               id,
                               created_at,
                               updated_at,
-                              original_name,
+                              default_name,
                               normalized_name
 )
 VALUES
@@ -236,7 +236,7 @@ INSERT INTO media.media_genre(
                               id,
                               created_at,
                               updated_at,
-                              original_name,
+                              default_name,
                               normalized_name,
                               description
 )
