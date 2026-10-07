@@ -2,7 +2,7 @@
 set -eu
 
 KC=/opt/keycloak/bin/kcadm.sh
-SERVER=http://keycloak:8080
+SERVER=http://localhost:8080
 
 attempt=0
 until "$KC" config credentials \

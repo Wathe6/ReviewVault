@@ -31,34 +31,13 @@ services:
       KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
-    depends_on:
-      - postgres
-    networks:
-      - reviewvault-net
-
-  keycloak-init:
-    image: quay.io/keycloak/keycloak:latest
-    profiles:
-      - init
-    env_file:
-      - .env
-    entrypoint: ["/bin/bash", "/opt/keycloak/init/init.sh"]
-    healthcheck:
-      test:
-        - CMD
-        - bash
-        - -c
-        - "{ printf 'HEAD /health/ready HTTP/1.0\\r\\n\\r\\n' >&0; grep 'HTTP/1.0 200'; } 0<>/dev/tcp/localhost/9000"
-      interval: 5s
-      timeout: 5s
-      retries: 24
-      start_period: 20s
+      KC_HEALTH_ENABLED: "true"
     volumes:
       - ./keycloak/init.sh:/opt/keycloak/init/init.sh:ro
+    post_start:
+      - command: [ "/bin/bash", "/opt/keycloak/init/init.sh" ]
     depends_on:
-      keycloak:
-        condition: service_healthy
-    restart: "no"
+      - postgres
     networks:
       - reviewvault-net
 
