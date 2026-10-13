@@ -107,6 +107,35 @@ services:
     networks:
       - reviewvault-net
 
+  profile:
+    image: reviewvault-profile
+    container_name: reviewvault-profile
+    build:
+      context: ..
+      dockerfile: services/profile/Dockerfile
+    ports:
+      - "${PROFILE_PORT}:8080"
+    env_file:
+      - .env
+    environment:
+      SPRING_APPLICATION_NAME: profile
+      SERVER_PORT: 8080
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${PROFILE_DB}
+      SPRING_DATASOURCE_USERNAME: ${PROFILE_DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${PROFILE_DB_PASSWORD}
+    depends_on:
+      eureka:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -fsS http://localhost:8080/actuator/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - reviewvault-net
+
 networks:
   reviewvault-net:
     external: true

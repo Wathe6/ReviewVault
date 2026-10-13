@@ -18,11 +18,11 @@ public interface MediaItemMapper {
     MediaItemResponse toResponse(MediaItemEntity mediaItem);
 
     @Mapping(target = "id",                 ignore = true)
-    @Mapping(target = "mediaGroup", ignore = true)
-    @Mapping(target = "mediaFormat", ignore = true)
-    @Mapping(target = "mediaCategory", ignore = true)
-    @Mapping(target = "mediaItemStatus", ignore = true)
-    @Mapping(target = "originalLanguage", ignore = true)
+    @Mapping(target = "mediaGroup",         ignore = true)
+    @Mapping(target = "mediaFormat",        ignore = true)
+    @Mapping(target = "mediaCategory",      ignore = true)
+    @Mapping(target = "mediaItemStatus",    ignore = true)
+    @Mapping(target = "originalLanguage",   ignore = true)
     MediaItemEntity toEntity(MediaItemRequest mediaItemRequest);
 
     @Mapping(target = "id",                 ignore = true)

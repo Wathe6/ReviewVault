@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -20,10 +22,18 @@ import lombok.Setter;
 public class UserProfileEntity extends BaseUuidEntity {
 
     @NotNull
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "keycloak_user_id", nullable = false, unique = true)
+    private UUID keycloakUserId;
+
+    @NotNull
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Nullable
     @Column(name = "cover_url", nullable = true)
     private String coverUrl;
+
+    @NotNull
+    @Column(name = "deleted", nullable = false)
+    private Boolean deleted;
 }

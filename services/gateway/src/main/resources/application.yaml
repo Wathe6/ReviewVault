@@ -24,7 +24,13 @@ spring:
             - id: review
               uri: lb://review
               predicates:
-                - Path=/api/v1/**
+                - Path=/api/v1/reviews/**
+              filters:
+                - AddRequestHeader=X-Source-Service, gateway
+            - id: profile
+              uri: lb://profile
+              predicates:
+                - Path=/api/v1/profiles/**
               filters:
                 - AddRequestHeader=X-Source-Service, gateway
 
