@@ -1,7 +1,7 @@
 package io.envoi.library.collection.entity;
 
 import io.envoi.contracts.common.BaseNumericIdEntity;
-import io.envoi.profile.profile.entity.UserProfileEntity;
+import io.envoi.library.replica.entity.UserProfileReplicaEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,13 +20,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "user_folder", schema = "profile")
+@Table(name = "user_folder", schema = "library")
 public class UserFolderEntity extends BaseNumericIdEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     @JoinColumn(name = "user_profile_id", nullable = false)
-    private UserProfileEntity userProfileEntity;
+    private UserProfileReplicaEntity userProfileEntity;
 
     @NotNull
     @Column(name = "name", nullable = false, unique = true)

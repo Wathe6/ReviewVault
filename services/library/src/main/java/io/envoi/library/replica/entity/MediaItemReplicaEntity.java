@@ -3,15 +3,12 @@ package io.envoi.library.replica.entity;
 import io.envoi.contracts.common.BaseUuidEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -21,7 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "media_item_replica", schema = "profile")
+@Table(name = "media_item_replica", schema = "library")
 public class MediaItemReplicaEntity extends BaseUuidEntity {
 
     @NotNull
