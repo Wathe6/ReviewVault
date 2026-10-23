@@ -1,4 +1,4 @@
-package io.envoi.profile.replica.entity;
+package io.envoi.library.replica.entity;
 
 import io.envoi.contracts.common.BaseUuidEntity;
 import jakarta.persistence.Column;

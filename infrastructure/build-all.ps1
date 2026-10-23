@@ -57,6 +57,12 @@ try {
     Invoke-GradleTask ":services:profile:bootJar"
 
     Write-Host "--------------------------------------------"
+    Write-Host "Building Library..."
+    Write-Host "--------------------------------------------"
+
+    Invoke-GradleTask ":services:library:bootJar"
+
+    Write-Host "--------------------------------------------"
     Write-Host "All projects built successfully."
     Write-Host "Artifacts:"
     Write-Host " - contracts:  services/contracts/build/libs/"
@@ -65,6 +71,7 @@ try {
     Write-Host " - media:   services/media/build/libs/"
     Write-Host " - review: services/review/build/libs/"
     Write-Host " - profile: services/profile/build/libs/"
+    Write-Host " - profile: services/library/build/libs/"
     Write-Host "--------------------------------------------"
 
     Write-Host "--------------------------------------------"

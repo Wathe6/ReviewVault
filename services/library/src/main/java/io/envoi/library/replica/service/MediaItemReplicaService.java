@@ -1,7 +1,7 @@
-package io.envoi.profile.replica.service;
+package io.envoi.library.replica.service;
 
-import io.envoi.profile.replica.entity.MediaItemReplicaEntity;
-import io.envoi.profile.replica.repository.MediaItemReplicaRepository;
+import io.envoi.library.replica.entity.MediaItemReplicaEntity;
+import io.envoi.library.replica.repository.MediaItemReplicaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,6 @@
-package io.envoi.profile.collection.entity;
+package io.envoi.library.collection.entity;
 
 import io.envoi.contracts.common.BaseNumericIdEntity;
-import io.envoi.contracts.common.BaseUuidEntity;
 import io.envoi.profile.profile.entity.UserProfileEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;

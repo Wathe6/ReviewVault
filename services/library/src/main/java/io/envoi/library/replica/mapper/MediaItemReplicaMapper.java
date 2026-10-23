@@ -1,4 +1,4 @@
-package io.envoi.profile.replica.mapper;
+package io.envoi.library.replica.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

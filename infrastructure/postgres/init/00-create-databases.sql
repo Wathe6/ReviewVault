@@ -13,3 +13,7 @@ GRANT ALL PRIVILEGES ON DATABASE profile_db TO profile_user;
 CREATE USER review_user WITH PASSWORD 'review_pass';
 CREATE DATABASE review_db OWNER review_user;
 GRANT ALL PRIVILEGES ON DATABASE review_db TO review_user;
+
+CREATE USER library_user WITH PASSWORD 'library_pass';
+CREATE DATABASE library_db OWNER library_user;
+GRANT ALL PRIVILEGES ON DATABASE library_db TO library_user;

@@ -15,7 +15,8 @@ if ! ./gradlew clean \
   :services:gateway:bootJar \
   :services:media:bootJar \
   :services:review:bootJar \
-  :services:profile:bootJar; then
+  :services:profile:bootJar \
+  :services:library:bootJar; then
   echo "Gradle build failed. Docker Compose was not started." >&2
   exit 1
 fi

@@ -5,7 +5,6 @@ import io.envoi.media.classification.repository.MediaFormatRepository;
 import io.envoi.media.common.repository.LanguageRepository;
 import io.envoi.media.media.entity.MediaItemEntity;
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
