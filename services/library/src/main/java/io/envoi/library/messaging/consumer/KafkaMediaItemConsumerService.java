@@ -26,7 +26,7 @@ public class KafkaMediaItemConsumerService {
 
     @KafkaListener(
             topics = "${app.kafka.topics.media-item-events}",
-            groupId = "${spring.kafka.consumer.group-id}"
+            groupId = "${spring.kafka.consumers.media-item-consumer.group-id}"
     )
     public void listen(JsonNode message) {
         String type = message.path("metadata").path("eventType").asText();

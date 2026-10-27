@@ -1,4 +1,4 @@
-package io.envoi.contracts.media.v1;
+package io.envoi.contracts.common;
 
 import java.time.Instant;
 import java.util.UUID;

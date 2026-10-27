@@ -1,5 +1,6 @@
 package io.envoi.profile.profile.service;
 
+import io.envoi.profile.messaging.mapping.UserProfileEventMapper;
 import io.envoi.profile.profile.dto.request.UserProfileRequest;
 import io.envoi.profile.profile.entity.UserProfileEntity;
 import io.envoi.profile.profile.mapper.UserProfileMapper;
@@ -25,6 +26,8 @@ public class UserProfileService {
     private final UserProfileMapper userProfileMapper;
 
     private final ApplicationEventPublisher applicationEventPublisher;
+
+    private final UserProfileEventMapper eventMapper;
 
     @Transactional(readOnly = true)
     public UserProfileEntity findById(UUID id) {
@@ -56,7 +59,9 @@ public class UserProfileService {
 
         log.info("UserProfile created with id {}", entity.getId());
 
-        //applicationEventPublisher.publishEvent();
+        applicationEventPublisher.publishEvent(
+                eventMapper.toCreatedV1(entity)
+        );
 
         return entity;
     }
@@ -72,7 +77,9 @@ public class UserProfileService {
 
         log.info("UserProfile updated with id {}", entity.getId());
 
-        //applicationEventPublisher.publishEvent();
+        applicationEventPublisher.publishEvent(
+                eventMapper.toUpdatedV1(entity)
+        );
 
         return entity;
     }
@@ -87,6 +94,8 @@ public class UserProfileService {
 
         log.info("UserProfile deleted with id {}", entity.getId());
 
-        //applicationEventPublisher.publishEvent();
+        applicationEventPublisher.publishEvent(
+                eventMapper.toDeletedV1(entity)
+        );
     }
 }

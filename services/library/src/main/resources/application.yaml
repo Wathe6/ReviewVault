@@ -26,7 +26,6 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER}
     consumer:
-      group-id: reviews-media-item-v1
       auto-offset-reset: earliest
       key-deserializer: "${KAFKA_KEY_DESERIALIZER}"
       value-deserializer: "${KAFKA_VALUE_DESERIALIZER}"
@@ -34,11 +33,17 @@ spring:
         spring.json.trusted.packages: io.envoi.contracts.media.v1
         spring.json.use.type.headers: false
         spring.json.value.default.type: tools.jackson.databind.JsonNode
+    consumers:
+      user-profile-consumer:
+        group-id: reviews-user-profile-v1
+      media-item-consumer:
+        group-id: reviews-media-item-v1
 
 app:
   kafka:
     topics:
       media-item-events: ${KAFKA_TOPIC_MEDIA_ITEM_EVENTS:reviewvault.media-item-events.v1}
+      user-profile-events: ${KAFKA_TOPIC_USER_PROFILE_EVENTS:reviewvault.user-profile-events.v1}
 
 server:
   port: ${SERVER_PORT:8080}

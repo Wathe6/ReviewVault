@@ -1,19 +1,12 @@
 package io.envoi.review.messaging;
 
-import io.envoi.contracts.media.v1.EventMetadataV1;
+import io.envoi.contracts.common.EventMetadataV1;
 import io.envoi.contracts.media.v1.MediaItemCreatedV1;
 import io.envoi.contracts.media.v1.MediaItemDeletedV1;
 import io.envoi.contracts.media.v1.MediaItemSnapshotV1;
 import io.envoi.contracts.media.v1.MediaItemUpdatedV1;
-import io.envoi.review.messaging.consumer.KafkaMediaItemConsumerService;
-import io.envoi.review.messaging.mapping.MediaItemEventMapper;
 import io.envoi.review.replica.entity.MediaItemReplicaEntity;
 import io.envoi.review.replica.service.MediaItemReplicaService;
-import org.apache.kafka.clients.consumer.Consumer;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.common.serialization.StringDeserializer;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,23 +14,14 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
-import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.transaction.support.TransactionTemplate;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
 
 import java.time.Instant;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.timeout;
@@ -95,7 +79,8 @@ class EmbeddedKafkaIntegrationTest {
                 ),
                 new MediaItemSnapshotV1(
                         aggregateId,
-                        "TestCreatedV1"
+                        "TestCreatedV1",
+                        "CoverUrl"
                 )
         );
 
@@ -109,7 +94,8 @@ class EmbeddedKafkaIntegrationTest {
                 ),
                 new MediaItemSnapshotV1(
                         aggregateId,
-                        "TestUpdatedV1"
+                        "TestUpdatedV1",
+                        "CoverUrl"
                 )
         );
 
@@ -123,7 +109,8 @@ class EmbeddedKafkaIntegrationTest {
                 ),
                 new MediaItemSnapshotV1(
                         aggregateId,
-                        "TestDeletedV1"
+                        "TestDeletedV1",
+                        "CoverUrl"
                 )
         );
     }

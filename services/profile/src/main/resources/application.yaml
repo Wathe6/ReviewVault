@@ -34,6 +34,12 @@ spring:
         spring.json.trusted.packages: io.envoi.contracts.media.v1
         spring.json.use.type.headers: false
         spring.json.value.default.type: tools.jackson.databind.JsonNode
+    producer:
+      key-serializer: "${KAFKA_KEY_SERIALIZER}"
+      value-serializer: "${KAFKA_VALUE_SERIALIZER}"
+      properties:
+        spring.json.add.type.headers: false
+
   security:
     oauth2:
       resourceserver:
@@ -41,9 +47,10 @@ spring:
           issuer-uri: http://localhost:${KEYCLOAK_PORT}/realms/${KEYCLOAK_REALM}
           jwk-set-uri: http://keycloak:8080/realms/${KEYCLOAK_REALM}/protocol/openid-connect/certs
 
-kafka:
-  topics:
-    media-item-events: ${KAFKA_TOPIC_MEDIA_ITEM_EVENTS:reviewvault.media-item-events.v1}
+app:
+  kafka:
+    topics:
+      user-profile-events: ${KAFKA_TOPIC_USER_PROFILE_EVENTS:reviewvault.user-profile-events.v1}
 
 server:
   port: ${SERVER_PORT:8080}
