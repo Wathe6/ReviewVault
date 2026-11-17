@@ -1,10 +1,8 @@
 package io.envoi.media.messaging.producer;
 
-import io.envoi.contracts.media.v1.MediaItemCreatedV1;
-import io.envoi.contracts.media.v1.MediaItemDeletedV1;
-import io.envoi.contracts.media.v1.MediaItemUpdatedV1;
-import io.envoi.media.media.entity.MediaItemEntity;
-import io.envoi.media.messaging.mapping.MediaItemEventMapper;
+import io.envoi.contracts.media.v1.item.MediaItemCreatedV1;
+import io.envoi.contracts.media.v1.item.MediaItemDeletedV1;
+import io.envoi.contracts.media.v1.item.MediaItemUpdatedV1;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

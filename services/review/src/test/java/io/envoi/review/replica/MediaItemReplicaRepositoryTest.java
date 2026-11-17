@@ -1,7 +1,7 @@
 package io.envoi.review.replica;
 
-import io.envoi.review.replica.entity.MediaItemReplicaEntity;
-import io.envoi.review.replica.repository.MediaItemReplicaRepository;
+import io.envoi.replica.mediaitem.entity.MediaItemReplicaEntity;
+import io.envoi.replica.mediaitem.repository.MediaItemReplicaRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,8 +35,6 @@ public class MediaItemReplicaRepositoryTest {
 
         mediaItemReplicaEntity.setId(UUID.randomUUID());
         mediaItemReplicaEntity.setTitle("Test1");
-        mediaItemReplicaEntity.setCreatedAt(Instant.now());
-        mediaItemReplicaEntity.setUpdatedAt(Instant.now());
         mediaItemReplicaEntity.setDeleted(false);
         mediaItemReplicaEntity.setLastEventId(UUID.randomUUID());
         mediaItemReplicaEntity.setLastEventAt(Instant.now());

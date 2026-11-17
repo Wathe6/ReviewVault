@@ -10,6 +10,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Все медиа-элементы в проекте могут быть представлены в одной из 5 категорий:
+ * видео, комикс, литература, музыка, игра.
+ * */
 @Getter
 @Setter
 @AllArgsConstructor

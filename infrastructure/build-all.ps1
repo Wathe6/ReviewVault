@@ -24,7 +24,13 @@ try {
     Write-Host "Building Contracts..."
     Write-Host "--------------------------------------------"
 
-    Invoke-GradleTask ":services:contracts:jar"
+    Invoke-GradleTask ":libraries:contracts:jar"
+
+    Write-Host "--------------------------------------------"
+    Write-Host "Building Replica..."
+    Write-Host "--------------------------------------------"
+
+    Invoke-GradleTask ":libraries:replica:jar"
 
     Write-Host "--------------------------------------------"
     Write-Host "Building Eureka..."
@@ -65,13 +71,14 @@ try {
     Write-Host "--------------------------------------------"
     Write-Host "All projects built successfully."
     Write-Host "Artifacts:"
-    Write-Host " - contracts:  services/contracts/build/libs/"
+    Write-Host " - contracts:  libraries/contracts/build/libs/"
+    Write-Host " - replica:  libraries/replica/build/libs/"
     Write-Host " - eureka:  services/eureka/build/libs/"
     Write-Host " - gateway: services/gateway/build/libs/"
     Write-Host " - media:   services/media/build/libs/"
     Write-Host " - review: services/review/build/libs/"
     Write-Host " - profile: services/profile/build/libs/"
-    Write-Host " - profile: services/library/build/libs/"
+    Write-Host " - library: services/library/build/libs/"
     Write-Host "--------------------------------------------"
 
     Write-Host "--------------------------------------------"

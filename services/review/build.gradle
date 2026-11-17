@@ -3,7 +3,8 @@ plugins {
 }
 
 dependencies {
-	implementation project(':services:contracts')
+	implementation project(':libraries:contracts')
+	implementation project(':libraries:replica')
 
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

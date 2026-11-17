@@ -13,6 +13,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Представляет форматы медиа-элементов, в которых они могут существовать:
+ * фильм, сериал, книга, том, цикл, альбом, сингл, игра, DLC, и т.д.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

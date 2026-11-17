@@ -15,18 +15,22 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: review
 
   flyway:
     enabled: true
     create-schemas: true
     default-schema: public
     schemas: public, review
+    baseline-on-migrate: true
+    baseline-version: "0"
     locations: classpath:db/migration
+    placeholders:
+      replicaSchema: review
 
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER}
     consumer:
-      group-id: reviews-media-item-v1
       auto-offset-reset: earliest
       key-deserializer: "${KAFKA_KEY_DESERIALIZER}"
       value-deserializer: "${KAFKA_VALUE_DESERIALIZER}"
@@ -34,11 +38,17 @@ spring:
         spring.json.trusted.packages: io.envoi.contracts.media.v1
         spring.json.use.type.headers: false
         spring.json.value.default.type: tools.jackson.databind.JsonNode
+    consumers:
+      user-profile-consumer:
+        group-id: review-user-profile-v1
+      media-item-consumer:
+        group-id: review-media-item-v1
 
 app:
   kafka:
     topics:
       media-item-events: ${KAFKA_TOPIC_MEDIA_ITEM_EVENTS:reviewvault.media-item-events.v1}
+      user-profile-events: ${KAFKA_TOPIC_USER_PROFILE_EVENTS:reviewvault.user-profile-events.v1}
 
 server:
   port: ${SERVER_PORT:8080}

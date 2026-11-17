@@ -14,6 +14,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Медиа группа (франшиза), объединяющая несколько медиа элементов (media item).
+ *
+ * <p>В неё могут входить связанные сезоны, фильмы, игры, песни.
+ * */
 @Getter
 @Setter
 @AllArgsConstructor

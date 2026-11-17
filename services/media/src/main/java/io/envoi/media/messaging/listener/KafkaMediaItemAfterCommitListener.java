@@ -1,9 +1,8 @@
 package io.envoi.media.messaging.listener;
 
-import io.envoi.contracts.media.v1.MediaItemCreatedV1;
-import io.envoi.contracts.media.v1.MediaItemDeletedV1;
-import io.envoi.contracts.media.v1.MediaItemUpdatedV1;
-import io.envoi.media.media.entity.MediaItemEntity;
+import io.envoi.contracts.media.v1.item.MediaItemCreatedV1;
+import io.envoi.contracts.media.v1.item.MediaItemDeletedV1;
+import io.envoi.contracts.media.v1.item.MediaItemUpdatedV1;
 import io.envoi.media.messaging.producer.KafkaMediaItemProducerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

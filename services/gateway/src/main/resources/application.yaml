@@ -33,6 +33,12 @@ spring:
                 - Path=/api/v1/profiles/**
               filters:
                 - AddRequestHeader=X-Source-Service, gateway
+            - id: library
+              uri: lb://library
+              predicates:
+                - Path=/api/v1/libraries/**
+              filters:
+                - AddRequestHeader=X-Source-Service, gateway
 
   security:
     oauth2:

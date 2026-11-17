@@ -1,12 +1,12 @@
 package io.envoi.review.messaging;
 
 import io.envoi.contracts.common.EventMetadataV1;
-import io.envoi.contracts.media.v1.MediaItemCreatedV1;
-import io.envoi.contracts.media.v1.MediaItemDeletedV1;
-import io.envoi.contracts.media.v1.MediaItemSnapshotV1;
-import io.envoi.contracts.media.v1.MediaItemUpdatedV1;
-import io.envoi.review.replica.entity.MediaItemReplicaEntity;
-import io.envoi.review.replica.service.MediaItemReplicaService;
+import io.envoi.contracts.media.v1.item.MediaItemCreatedV1;
+import io.envoi.contracts.media.v1.item.MediaItemDeletedV1;
+import io.envoi.contracts.media.v1.item.MediaItemSnapshotV1;
+import io.envoi.contracts.media.v1.item.MediaItemUpdatedV1;
+import io.envoi.replica.mediaitem.entity.MediaItemReplicaEntity;
+import io.envoi.replica.mediaitem.service.MediaItemReplicaService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

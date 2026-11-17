@@ -10,7 +10,8 @@ echo "Building Spring Boot services..."
 echo "--------------------------------------------"
 
 if ! ./gradlew clean \
-  :services:contracts:jar \
+  :libraries:contracts:jar \
+  :libraries:replica:jar \
   :services:eureka:bootJar \
   :services:gateway:bootJar \
   :services:media:bootJar \
