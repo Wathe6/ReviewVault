@@ -39,10 +39,12 @@ spring:
         spring.json.use.type.headers: false
         spring.json.value.default.type: tools.jackson.databind.JsonNode
     consumers:
-      user-profile-consumer:
-        group-id: library-user-profile-v1
       media-item-consumer:
         group-id: library-media-item-v1
+      media-group-consumer:
+        group-id: library-media-group-v1
+      user-profile-consumer:
+        group-id: library-user-profile-v1
 
   security:
     oauth2:
@@ -55,6 +57,7 @@ app:
   kafka:
     topics:
       media-item-events: ${KAFKA_TOPIC_MEDIA_ITEM_EVENTS:reviewvault.media-item-events.v1}
+      media-group-events: ${KAFKA_TOPIC_MEDIA_GROUP_EVENTS:reviewvault.media-group-events.v1}
       user-profile-events: ${KAFKA_TOPIC_USER_PROFILE_EVENTS:reviewvault.user-profile-events.v1}
 
 server:

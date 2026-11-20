@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
+@EntityScan("io.envoi.library")
+@EnableJpaRepositories("io.envoi.library")
 @Import({
 		FlywayConfig.class,
 		MediaItemReplicaConfig.class,

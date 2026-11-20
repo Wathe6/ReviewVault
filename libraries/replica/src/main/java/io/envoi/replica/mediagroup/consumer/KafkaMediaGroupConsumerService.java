@@ -34,7 +34,7 @@ public class KafkaMediaGroupConsumerService {
         MediaGroupReplicaEntity entity;
 
         switch (type) {
-            case "MEDIA_ITEM_CREATED" -> {
+            case "MEDIA_GROUP_CREATED" -> {
 
                 MediaGroupCreatedV1 createdV1 = objectMapper.convertValue(message, MediaGroupCreatedV1.class);
 
@@ -42,7 +42,7 @@ public class KafkaMediaGroupConsumerService {
 
                 replicaService.save(entity);
             }
-            case "MEDIA_ITEM_UPDATED" -> {
+            case "MEDIA_GROUP_UPDATED" -> {
 
                 MediaGroupUpdatedV1 updatedV1 = objectMapper.convertValue(message, MediaGroupUpdatedV1.class);
 
@@ -50,7 +50,7 @@ public class KafkaMediaGroupConsumerService {
 
                 replicaService.update(entity);
             }
-            case "MEDIA_ITEM_DELETED" -> {
+            case "MEDIA_GROUP_DELETED" -> {
 
                 MediaGroupDeletedV1 deletedV1 = objectMapper.convertValue(message, MediaGroupDeletedV1.class);
 
