@@ -1,43 +1,33 @@
 spring:
   application:
     name: ${SPRING_APPLICATION_NAME:library}
+
+  config:
+    import:
+      - classpath:reviewvault/config/reviewvault-common.yaml
+      - classpath:reviewvault/config/reviewvault-postgres.yaml
+      - classpath:reviewvault/config/reviewvault-kafka.yaml
+      - classpath:reviewvault/config/reviewvault-keycloak.yaml
+      - classpath:reviewvault/config/reviewvault-eureka.yaml
+
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/library_db}
     username: ${SPRING_DATASOURCE_USERNAME:library_user}
     password: ${SPRING_DATASOURCE_PASSWORD:library_pass}
 
-  jpa:
-    hibernate:
-      ddl-auto: none
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        default_schema: library
-
   flyway:
-    enabled: true
-    create-schemas: true
-    default-schema: public
-    schemas: public, library
     baseline-on-migrate: true
     baseline-version: "0"
-    locations: classpath:db/migration
+    schemas: public, library
     placeholders:
       replicaSchema: library
 
+  jpa:
+    properties:
+      hibernate:
+        default_schema: library
+
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER}
-    consumer:
-      auto-offset-reset: earliest
-      key-deserializer: "${KAFKA_KEY_DESERIALIZER}"
-      value-deserializer: "${KAFKA_VALUE_DESERIALIZER}"
-      properties:
-        spring.json.trusted.packages: io.envoi.contracts.media.v1
-        spring.json.use.type.headers: false
-        spring.json.value.default.type: tools.jackson.databind.JsonNode
     consumers:
       media-item-consumer:
         group-id: library-media-item-v1
@@ -46,41 +36,9 @@ spring:
       user-profile-consumer:
         group-id: library-user-profile-v1
 
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:${KEYCLOAK_PORT}/realms/${KEYCLOAK_REALM}
-          jwk-set-uri: http://keycloak:8080/realms/${KEYCLOAK_REALM}/protocol/openid-connect/certs
-
 app:
   kafka:
     topics:
       media-item-events: ${KAFKA_TOPIC_MEDIA_ITEM_EVENTS:reviewvault.media-item-events.v1}
       media-group-events: ${KAFKA_TOPIC_MEDIA_GROUP_EVENTS:reviewvault.media-group-events.v1}
       user-profile-events: ${KAFKA_TOPIC_USER_PROFILE_EVENTS:reviewvault.user-profile-events.v1}
-
-server:
-  port: ${SERVER_PORT:8080}
-
-eureka:
-  client:
-    service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics,loggers
-  endpoint:
-    health:
-      probes:
-        enabled: true
-    loggers:
-      enabled: true
-
-logging:
-  level:
-    root: WARN
-    io.envoi: INFO

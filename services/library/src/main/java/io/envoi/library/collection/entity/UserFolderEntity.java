@@ -24,13 +24,13 @@ import lombok.Setter;
 @Table(
         name = "user_folder",
         schema = "library",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"user_profile_id", "name"}))
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_profile_replica_id", "name"}))
 public class UserFolderEntity extends BaseNumericIdEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    @JoinColumn(name = "user_profile_id", nullable = false)
-    private UserProfileReplicaEntity userProfile;
+    @JoinColumn(name = "user_profile_replica_id", nullable = false)
+    private UserProfileReplicaEntity userProfileReplica;
 
     @NotNull
     @Column(name = "name", nullable = false, unique = true)

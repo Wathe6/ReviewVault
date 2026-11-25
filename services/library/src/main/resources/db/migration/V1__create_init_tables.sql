@@ -36,4 +36,4 @@ ALTER TABLE library.folder_item
     ADD CONSTRAINT FK_FOLDER_ITEM_ON_MEDIA_ITEM FOREIGN KEY (media_item_replica_id) REFERENCES library.media_item_replica(id);
 
 ALTER TABLE library.folder_item
-    ADD CONSTRAINT FK_FOLDER_ITEM_ON_MEDIA_GROUP FOREIGN KEY (media_group_replica_id) REFERENCES library.media_item_replica(id);
+    ADD CONSTRAINT FK_FOLDER_ITEM_ON_MEDIA_GROUP FOREIGN KEY (media_group_replica_id) REFERENCES library.media_group_replica(id);

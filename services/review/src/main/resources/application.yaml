@@ -1,43 +1,32 @@
 spring:
   application:
     name: ${SPRING_APPLICATION_NAME:review}
+
+  config:
+    import:
+      - classpath:reviewvault/config/reviewvault-common.yaml
+      - classpath:reviewvault/config/reviewvault-postgres.yaml
+      - classpath:reviewvault/config/reviewvault-kafka.yaml
+      - classpath:reviewvault/config/reviewvault-eureka.yaml
+
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/review_db}
     username: ${SPRING_DATASOURCE_USERNAME:review_user}
     password: ${SPRING_DATASOURCE_PASSWORD:review_pass}
 
   jpa:
-    hibernate:
-      ddl-auto: none
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
         default_schema: review
 
   flyway:
-    enabled: true
-    create-schemas: true
-    default-schema: public
-    schemas: public, review
     baseline-on-migrate: true
     baseline-version: "0"
-    locations: classpath:db/migration
+    schemas: public, review
     placeholders:
       replicaSchema: review
 
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER}
-    consumer:
-      auto-offset-reset: earliest
-      key-deserializer: "${KAFKA_KEY_DESERIALIZER}"
-      value-deserializer: "${KAFKA_VALUE_DESERIALIZER}"
-      properties:
-        spring.json.trusted.packages: io.envoi.contracts.media.v1
-        spring.json.use.type.headers: false
-        spring.json.value.default.type: tools.jackson.databind.JsonNode
     consumers:
       media-item-consumer:
         group-id: review-media-item-v1
@@ -52,28 +41,3 @@ app:
       media-item-events: ${KAFKA_TOPIC_MEDIA_ITEM_EVENTS:reviewvault.media-item-events.v1}
       media-group-events: ${KAFKA_TOPIC_MEDIA_GROUP_EVENTS:reviewvault.media-group-events.v1}
       user-profile-events: ${KAFKA_TOPIC_USER_PROFILE_EVENTS:reviewvault.user-profile-events.v1}
-
-server:
-  port: ${SERVER_PORT:8080}
-
-eureka:
-  client:
-    service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics,loggers
-  endpoint:
-    health:
-      probes:
-        enabled: true
-    loggers:
-      enabled: true
-
-logging:
-  level:
-    root: WARN
-    io.envoi: INFO

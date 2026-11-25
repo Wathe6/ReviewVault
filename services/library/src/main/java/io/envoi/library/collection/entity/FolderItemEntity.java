@@ -1,6 +1,7 @@
 package io.envoi.library.collection.entity;
 
 import io.envoi.contracts.common.BaseNumericIdEntity;
+import io.envoi.replica.mediagroup.entity.MediaGroupReplicaEntity;
 import io.envoi.replica.mediaitem.entity.MediaItemReplicaEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -30,8 +31,13 @@ public class FolderItemEntity extends BaseNumericIdEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    @JoinColumn(name = "media_item_id", nullable = false)
-    private MediaItemReplicaEntity mediaItem;
+    @JoinColumn(name = "media_item_replica_id", nullable = false)
+    private MediaItemReplicaEntity mediaItemReplica;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
+    @JoinColumn(name = "media_group_replica_id", nullable = false)
+    private MediaGroupReplicaEntity mediaGroupReplica;
 
     @Nullable
     @Column(name = "position", nullable = true)

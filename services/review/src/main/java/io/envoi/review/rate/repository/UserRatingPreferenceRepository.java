@@ -10,5 +10,5 @@ import java.util.UUID;
 
 public interface UserRatingPreferenceRepository extends JpaRepository<UserRatingPreferenceEntity, Long> {
 
-    Optional<UserRatingPreferenceEntity> findByUserProfileReplicaId(@NotNull UserProfileReplicaEntity userProfileReplicaId);
+    Optional<UserRatingPreferenceEntity> findByUserProfileReplica(@NotNull UserProfileReplicaEntity userProfileReplica);
 }

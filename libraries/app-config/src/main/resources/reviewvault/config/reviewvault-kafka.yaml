@@ -1,0 +1,16 @@
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER}
+    consumer:
+      auto-offset-reset: earliest
+      key-deserializer: "${KAFKA_KEY_DESERIALIZER}"
+      value-deserializer: "${KAFKA_VALUE_DESERIALIZER}"
+      properties:
+        spring.json.trusted.packages: io.envoi.contracts.media.v1
+        spring.json.use.type.headers: false
+        spring.json.value.default.type: tools.jackson.databind.JsonNode
+    producer:
+      key-serializer: "${KAFKA_KEY_SERIALIZER}"
+      value-serializer: "${KAFKA_VALUE_SERIALIZER}"
+      properties:
+        spring.json.add.type.headers: false
