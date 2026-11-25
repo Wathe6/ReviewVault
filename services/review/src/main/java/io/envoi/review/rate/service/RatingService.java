@@ -61,7 +61,7 @@ public class RatingService {
         }
 
         UserRatingPreferenceEntity userRatingPreference =
-                userRatingPreferenceRepository.findByUserProfileReplicaId(entity.getUserProfileReplica())
+                userRatingPreferenceRepository.findByUserProfileReplica(entity.getUserProfileReplica())
                         .orElseThrow(() -> new EntityNotFoundException("UserRatingPreference not found " + userProfileId));
 
         RatingScaleEntity ratingScale = userRatingPreference.getRatingScaleEntity();
@@ -97,7 +97,7 @@ public class RatingService {
         }
 
         UserRatingPreferenceEntity userRatingPreference =
-                userRatingPreferenceRepository.findByUserProfileReplicaId(entity.getUserProfileReplica())
+                userRatingPreferenceRepository.findByUserProfileReplica(entity.getUserProfileReplica())
                         .orElseThrow(() -> new EntityNotFoundException("UserRatingPreference not found " + userProfileId));
 
         RatingScaleEntity ratingScale = userRatingPreference.getRatingScaleEntity();

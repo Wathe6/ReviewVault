@@ -1,0 +1,16 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+
+rule_files:
+
+scrape_configs:
+  - job_name: reviewvault
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["eureka:8761", "gateway:8080", "library:8080", "media:8080", "profile:8080", "review:8080"]

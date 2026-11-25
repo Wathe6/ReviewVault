@@ -45,7 +45,7 @@ public class UserRatingDescriptionService {
         entity.setUserProfileId(userProfileReplicaRepository.findById(userProfileReplicaId)
                 .orElseThrow(() -> new EntityNotFoundException("UserRatingDescriptionEntity not found " + userProfileReplicaId)));
 
-        UserRatingPreferenceEntity userRatingPreference = userRatingPreferenceRepository.findByUserProfileReplicaId(entity.getUserProfileId())
+        UserRatingPreferenceEntity userRatingPreference = userRatingPreferenceRepository.findByUserProfileReplica(entity.getUserProfileId())
                 .orElseThrow(() -> new EntityNotFoundException("UserRatingPreferenceEntity not found " + userProfileReplicaId));
 
         RatingScaleEntity ratingScale = userRatingPreference.getRatingScaleEntity();
@@ -67,7 +67,7 @@ public class UserRatingDescriptionService {
 
         userRatingDescriptionMapper.update(request, entity);
 
-        UserRatingPreferenceEntity userRatingPreference = userRatingPreferenceRepository.findByUserProfileReplicaId(entity.getUserProfileId())
+        UserRatingPreferenceEntity userRatingPreference = userRatingPreferenceRepository.findByUserProfileReplica(entity.getUserProfileId())
                 .orElseThrow(() -> new EntityNotFoundException("UserRatingPreferenceEntity not found " + entity.getUserProfileId()));
 
         RatingScaleEntity ratingScale = userRatingPreference.getRatingScaleEntity();

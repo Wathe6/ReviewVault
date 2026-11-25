@@ -16,6 +16,7 @@ dependencies {
 	implementation 'jakarta.validation:jakarta.validation-api:4.0.0-M1'
 	implementation 'org.mapstruct:mapstruct:1.6.3'
 	implementation 'org.flywaydb:flyway-database-postgresql'
+	implementation 'io.micrometer:micrometer-registry-prometheus'
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'

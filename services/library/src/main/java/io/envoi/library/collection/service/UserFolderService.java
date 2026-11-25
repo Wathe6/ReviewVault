@@ -36,7 +36,7 @@ public class UserFolderService {
 
         UserFolderEntity entity = mapper.toEntity(request);
 
-        entity.setUserProfile(userProfileRepository.findById(userProfileId)
+        entity.setUserProfileReplica(userProfileRepository.findById(userProfileId)
                 .orElseThrow(() -> new EntityNotFoundException("UserProfile not found " + userProfileId)));
 
         entity = userFolderRepository.save(entity);

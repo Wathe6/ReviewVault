@@ -2,7 +2,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,loggers
+        include: health,info,metrics,loggers,prometheus
   endpoint:
     health:
       probes:
@@ -11,6 +11,10 @@ management:
       enabled: true
 
 logging:
+  logging:
+    structured:
+      format:
+        console: ecs
   level:
     root: WARN
     io.envoi: INFO
