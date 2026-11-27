@@ -51,6 +51,7 @@ public class MediaGroupController {
 
     @PostMapping("")
     public ResponseEntity<MediaGroupResponse> create(@Valid @RequestBody MediaGroupRequest mediaGroupRequest) {
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(
@@ -62,6 +63,7 @@ public class MediaGroupController {
 
     @PutMapping("/{id}")
     public ResponseEntity<MediaGroupResponse> update(@PathVariable UUID id, @Valid @RequestBody MediaGroupRequest mediaGroupRequest) {
+
         return ResponseEntity.ok(
                 mediaGroupMapper.toResponse(
                         mediaGroupService.update(id, mediaGroupRequest)
@@ -71,7 +73,9 @@ public class MediaGroupController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
+
         mediaGroupService.deleteById(id);
+
         return ResponseEntity.noContent().build();
     }
 }

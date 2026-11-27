@@ -21,7 +21,7 @@ import java.time.LocalDate;
 public class CompanyEntity extends BaseUuidEntity {
 
     @NotNull
-    @Column(name="name", nullable=false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "description", nullable = true, columnDefinition = "TEXT")

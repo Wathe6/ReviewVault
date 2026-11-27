@@ -42,16 +42,10 @@ public class UserRatingDescriptionService {
 
         UserRatingDescriptionEntity entity = userRatingDescriptionMapper.toEntity(request);
 
-        entity.setUserProfileId(userProfileReplicaRepository.findById(userProfileReplicaId)
+        entity.setUserProfileReplica(userProfileReplicaRepository.findById(userProfileReplicaId)
                 .orElseThrow(() -> new EntityNotFoundException("UserRatingDescriptionEntity not found " + userProfileReplicaId)));
 
-        UserRatingPreferenceEntity userRatingPreference = userRatingPreferenceRepository.findByUserProfileReplica(entity.getUserProfileId())
-                .orElseThrow(() -> new EntityNotFoundException("UserRatingPreferenceEntity not found " + userProfileReplicaId));
-
-        RatingScaleEntity ratingScale = userRatingPreference.getRatingScaleEntity();
-
-        entity.setNormalizedLeft(ratingScale.normalize(entity.getLeft()));
-        entity.setNormalizedRight(ratingScale.normalize(entity.getRight()));
+        updateNormalizedValues(entity);
 
         entity = userRatingDescriptionRepository.save(entity);
 
@@ -60,25 +54,33 @@ public class UserRatingDescriptionService {
         return entity;
     }
 
-    public UserRatingDescriptionEntity update(Long id, UserRatingDescriptionRequest request) {
+    public UserRatingDescriptionEntity update(Long id, UUID userProfileId, UserRatingDescriptionRequest request) {
 
         UserRatingDescriptionEntity entity = userRatingDescriptionRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("UserRatingDescriptionEntity not found " + id));
 
+        if(!entity.getUserProfileReplica().getId().equals(userProfileId)) {
+            throw new RuntimeException("Trying to update rating of another user with id " + userProfileId);
+        }
+
         userRatingDescriptionMapper.update(request, entity);
 
-        UserRatingPreferenceEntity userRatingPreference = userRatingPreferenceRepository.findByUserProfileReplica(entity.getUserProfileId())
-                .orElseThrow(() -> new EntityNotFoundException("UserRatingPreferenceEntity not found " + entity.getUserProfileId()));
+        updateNormalizedValues(entity);
+
+        log.info("UserRatingDescriptionEntity updated with id {}", entity.getId());
+
+        return userRatingDescriptionRepository.save(entity);
+    }
+
+    private void updateNormalizedValues(UserRatingDescriptionEntity entity) {
+
+        UserRatingPreferenceEntity userRatingPreference = userRatingPreferenceRepository.findByUserProfileReplica(entity.getUserProfileReplica())
+                .orElseThrow(() -> new EntityNotFoundException("UserRatingPreferenceEntity not found " + entity.getUserProfileReplica()));
 
         RatingScaleEntity ratingScale = userRatingPreference.getRatingScaleEntity();
 
         entity.setNormalizedLeft(ratingScale.normalize(entity.getLeft()));
         entity.setNormalizedRight(ratingScale.normalize(entity.getRight()));
-
-
-        log.info("UserRatingDescriptionEntity updated with id {}", entity.getId());
-
-        return userRatingDescriptionRepository.save(entity);
     }
 
     public void deleteById(Long id) {

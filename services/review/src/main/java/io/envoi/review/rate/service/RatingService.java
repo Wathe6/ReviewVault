@@ -50,23 +50,9 @@ public class RatingService {
         entity.setUserProfileReplica(userProfileReplicaRepository.findById(userProfileId)
                 .orElseThrow(() -> new EntityNotFoundException("UserProfileReplica not found " + userProfileId)));
 
-        if(request.mediaGroupId() != null) {
-            entity.setMediaGroupReplica(mediaGroupReplicaRepository.findById(request.mediaGroupId())
-                    .orElseThrow(() -> new EntityNotFoundException("MediaGroupReplica not found " + request.mediaGroupId())));
-        }
+        updateFk(entity, request);
 
-        if(request.mediaItemId() != null) {
-            entity.setMediaItemReplica(mediaItemReplicaRepository.findById(request.mediaItemId())
-                    .orElseThrow(() -> new EntityNotFoundException("MediaItemReplica not found " + request.mediaItemId())));
-        }
-
-        UserRatingPreferenceEntity userRatingPreference =
-                userRatingPreferenceRepository.findByUserProfileReplica(entity.getUserProfileReplica())
-                        .orElseThrow(() -> new EntityNotFoundException("UserRatingPreference not found " + userProfileId));
-
-        RatingScaleEntity ratingScale = userRatingPreference.getRatingScaleEntity();
-
-        entity.setNormalizedValue(ratingScale.normalize(entity.getValue()));
+        updateNormalizedValue(entity);
 
         entity = ratingRepository.save(entity);
 
@@ -86,6 +72,30 @@ public class RatingService {
 
         mapper.update(request, entity);
 
+        updateFk(entity, request);
+
+        updateNormalizedValue(entity);
+
+        entity = ratingRepository.save(entity);
+
+        log.info("RatingEntity updated with id {}", entity.getId());
+
+        return entity;
+    }
+
+    private void updateNormalizedValue(RatingEntity entity) {
+
+        UserRatingPreferenceEntity userRatingPreference =
+                userRatingPreferenceRepository.findByUserProfileReplica(entity.getUserProfileReplica())
+                        .orElseThrow(() -> new EntityNotFoundException("UserRatingPreference not found " + entity.getUserProfileReplica().getId()));
+
+        RatingScaleEntity ratingScale = userRatingPreference.getRatingScaleEntity();
+
+        entity.setNormalizedValue(ratingScale.normalize(entity.getValue()));
+    }
+
+    private void updateFk(RatingEntity entity, RatingRequest request) {
+
         if(request.mediaGroupId() != null) {
             entity.setMediaGroupReplica(mediaGroupReplicaRepository.findById(request.mediaGroupId())
                     .orElseThrow(() -> new EntityNotFoundException("MediaGroupReplica not found " + request.mediaGroupId())));
@@ -95,20 +105,6 @@ public class RatingService {
             entity.setMediaItemReplica(mediaItemReplicaRepository.findById(request.mediaItemId())
                     .orElseThrow(() -> new EntityNotFoundException("MediaItemReplica not found " + request.mediaItemId())));
         }
-
-        UserRatingPreferenceEntity userRatingPreference =
-                userRatingPreferenceRepository.findByUserProfileReplica(entity.getUserProfileReplica())
-                        .orElseThrow(() -> new EntityNotFoundException("UserRatingPreference not found " + userProfileId));
-
-        RatingScaleEntity ratingScale = userRatingPreference.getRatingScaleEntity();
-
-        entity.setNormalizedValue(ratingScale.normalize(entity.getValue()));
-
-        entity = ratingRepository.save(entity);
-
-        log.info("RatingEntity updated with id {}", entity.getId());
-
-        return entity;
     }
 
     public void deleteById(Long id) {

@@ -36,7 +36,7 @@ public class UserProfileService {
                 .orElseThrow(() -> new EntityNotFoundException("UserProfile not found " + id));
     }
 
-    public UserProfileEntity findByKeycloakUserId(UUID keycloakUserId, UserProfileRequest request) {
+    public UserProfileEntity findOrCreateByKeycloakUserId(UUID keycloakUserId, UserProfileRequest request) {
         Optional<UserProfileEntity> entity = userProfileRepository.findByKeycloakUserId(keycloakUserId);
 
         if(entity.isEmpty()) {
@@ -71,7 +71,7 @@ public class UserProfileService {
         UserProfileEntity entity = userProfileRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("UserProfile not found " + id));
 
-        userProfileMapper.update(request,entity);
+        userProfileMapper.update(request, entity);
 
         entity = userProfileRepository.save(entity);
 

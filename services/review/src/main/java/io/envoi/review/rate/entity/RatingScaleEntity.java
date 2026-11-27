@@ -40,7 +40,7 @@ public class RatingScaleEntity extends BaseNumericIdEntity<Short> {
 
     public Integer normalize(BigDecimal value) {
         BigDecimal base = new BigDecimal(10000);
-        int roundingValue = 4;
+        int roundingValue = 0;
 
         return value
                 .subtract(min)

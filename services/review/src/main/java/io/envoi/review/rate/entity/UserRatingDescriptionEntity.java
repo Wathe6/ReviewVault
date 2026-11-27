@@ -27,7 +27,7 @@ public class UserRatingDescriptionEntity extends BaseNumericIdEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     @JoinColumn(name = "user_profile_replica_id", nullable = false)
-    private UserProfileReplicaEntity userProfileId;
+    private UserProfileReplicaEntity userProfileReplica;
 
     @Column(name = "left", precision = 5, scale = 2, nullable = false)
     private BigDecimal left;

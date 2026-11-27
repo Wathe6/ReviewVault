@@ -40,7 +40,7 @@ public class UserProfileController {
         String username = jwt.getClaimAsString("preferred_username");
         UUID keycloakUserId = UUID.fromString(subject);
 
-        UserProfileEntity entity = userProfileService.findByKeycloakUserId(
+        UserProfileEntity entity = userProfileService.findOrCreateByKeycloakUserId(
                 keycloakUserId,
                 new UserProfileRequest(username, "")
         );

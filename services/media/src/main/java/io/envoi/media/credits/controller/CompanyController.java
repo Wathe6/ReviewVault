@@ -36,7 +36,7 @@ public class CompanyController {
             @PathVariable UUID id,
             @RequestParam(required = false) String lang) {
 
-        if(lang != null) {
+        if(!lang.isBlank()) {
             return ResponseEntity.ok(companyService.findLocalizedById(id, lang));
         }
 
